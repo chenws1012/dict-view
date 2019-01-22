@@ -1,0 +1,69 @@
+<form nz-form   nzLayout="horizontal">
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="6">
+        <nz-form-item  nzFlex>
+          <nz-form-label nzFor="" nzSpan="1-24">字典编码</nz-form-label>
+          <nz-form-control nzSpan="1-24">
+            <input nz-input [(ngModel)]="pageReqDto.dictTypeCd" id="typeCd" name="typeCd" placeholder="" nzAllowClear>
+          </nz-form-control>
+        </nz-form-item>
+    </div>
+    <div nz-col nzSpan="6">
+       <nz-form-item  nzFlex>
+         <nz-form-label nzFor="" nzSpan="1-24">字典名称</nz-form-label>
+         <nz-form-control nzSpan="1-24">
+           <input nz-input [(ngModel)]="pageReqDto.dictTypeName" id="typeName" name="typeName" placeholder="">
+         </nz-form-control>
+       </nz-form-item>
+    </div>
+    <div nz-col nzSpan="5">
+        <nz-form-item  nzFlex>
+            <nz-form-control nzSpan="1-24">
+                <button (click)="search()" nz-button [nzType]="'primary'" style="margin-right: 20px;">search</button>  
+                <button (click)="gotoNewPage()" nz-button [nzType]="'primary'">new</button>     
+            </nz-form-control>
+            
+        </nz-form-item>
+        
+      
+    </div>
+  </div>
+</form>
+
+<div class="search-result-list" *ngIf="resDto">
+    <nz-list [nzDataSource]="resDto.body['datas']" [nzRenderItem]="item" [nzBordered]="true"
+    [nzPagination]="pagination"
+    >
+        <ng-template #item let-i>
+        <nz-list-item [nzActions]="[delAction]">
+            <ng-template #delAction>
+                <nz-popconfirm [nzTitle]="'Sure to remove?'" (nzOnConfirm)="deleteType(i.id)">
+                        <a nz-popconfirm><i nz-p nz-icon type="delete" [theme]="'twotone'" [twoToneColor]="'#eb2f96'"></i></a>
+                </nz-popconfirm>
+            </ng-template>
+            <nz-list-item-meta
+            [nzTitle]="dictTypeCd"
+            [nzDescription]="i.remark">
+            <ng-template #dictTypeCd>
+                <i nz-icon type="stop" [theme]="'twotone'" [twoToneColor]="'#eb2f96'" *ngIf="!i.enableFlg" style="margin-right: 8px;"></i>
+                <i nz-icon type="check-circle" [theme]="'twotone'" [twoToneColor]="'#52c41a'" *ngIf="i.enableFlg" style="margin-right: 8px;"></i>
+                <a routerLink="/detail/{{i.id}}" >{{i.dictTypeCd}}</a> 
+                
+
+            </ng-template>
+            </nz-list-item-meta>
+        </nz-list-item>
+        </ng-template>
+        <ng-template #pagination>
+        <nz-pagination [(nzPageIndex)]="pageReqDto.pageNo" [(nzPageSize)]="pageReqDto.pageSize" [nzTotal]="resDto.body['count']" (nzPageIndexChange)="getPage()"></nz-pagination>
+        </ng-template>
+    </nz-list>
+    
+</div>
+
+<div style="text-align: center;">
+        <ng-template #indicatorTemplate><i nz-icon type="loading" style="font-size: 24px;"></i>
+        </ng-template>
+        <nz-spin [nzIndicator]="indicatorTemplate" [nzSpinning]="isLoading">
+        </nz-spin>
+</div>

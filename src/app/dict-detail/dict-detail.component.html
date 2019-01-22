@@ -1,0 +1,149 @@
+<div *ngIf="dictData">
+<div class="alert alert-warning">获取数据接口地址：<a href="http://172.81.206.37:9005/dict/dictDatas/{{dictData.dictTypeCd}}">http://172.81.206.37:9005/dict/dictDatas/{{dictData.dictTypeCd}}</a></div>
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" >
+  <nz-affix>
+    <button nz-button nzType="primary">save</button>
+  </nz-affix>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="typeCd">字典代码</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="typeCd" id="typeCd" [(ngModel)]="dictData['dictTypeCd']">
+      <nz-form-explain *ngIf="validateForm.get('typeCd').dirty && validateForm.get('typeCd').errors">required!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="typeName">字典名称</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="typeName" id="typeName" [(ngModel)]="dictData['dictTypeName']">
+      <nz-form-explain *ngIf="validateForm.get('typeName').dirty && validateForm.get('typeName').errors">required!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+ 
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="seq">显示序号</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="seq" id="seq" [(ngModel)]="dictData['dispOrderNo']">
+      <nz-form-explain *ngIf="validateForm.get('seq').dirty && validateForm.get('seq').errors">required!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="comment">备注</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <textarea formControlName="comment" nz-input rows="2" placeholder="write any thing" [(ngModel)]="dictData['remark']"></textarea>
+      <nz-form-explain *ngIf="validateForm.get('comment').dirty && validateForm.get('comment').errors">required!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-row style="margin-bottom:8px;">
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <label nz-checkbox formControlName="valid" [(ngModel)]="dictData['enableFlg']">
+        <span>有效</span>
+      </label>
+    </nz-form-control>
+  </nz-form-item>
+  <!-- <nz-form-item nz-row style="margin-bottom:8px;">
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button nz-button nzType="primary">save</button>
+    </nz-form-control>
+  </nz-form-item> -->
+</form>
+
+<button nz-button (click)="addRow()" class="editable-add-btn">Add</button>
+<nz-table #nzTable [nzData]="dataSet" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th>key</th>
+        <th>value</th>
+        <th>说明</th>
+        <th>序号</th>
+        <th>有效</th>
+
+        
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of nzTable.data">
+        <td>
+            <ng-container *ngIf="!editCache[i.id].edit">
+                {{i.dictCd}}
+            </ng-container>
+            <ng-container *ngIf="editCache[i.id].edit">
+              <input type="text" nz-input [(ngModel)]="editCache[i.id].data.dictCd">
+            </ng-container>
+        </td>
+        <td >
+            <ng-container *ngIf="!editCache[i.id].edit">
+              <span nz-tooltip nzTitle="{{i.dictName}}" style="width:350px;display: block;
+              overflow:hidden;
+              text-overflow:ellipsis;
+              white-space:nowrap;">
+                {{i.dictName}}
+              </span>
+            </ng-container>
+            <ng-container *ngIf="editCache[i.id].edit">
+              <input type="text" nz-input [(ngModel)]="editCache[i.id].data.dictName">
+            </ng-container>
+
+        </td>
+        <td>
+            <ng-container *ngIf="!editCache[i.id].edit">
+                <span nz-tooltip nzTitle="{{i.remark}}" style="width:150px;display: block;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;">
+                  {{i.remark}}
+                </span>
+            </ng-container>
+            <ng-container *ngIf="editCache[i.id].edit">
+              <input type="text" nz-input [(ngModel)]="editCache[i.id].data.remark">
+            </ng-container>
+
+        </td>
+        <td>
+            <ng-container *ngIf="!editCache[i.id].edit">
+                {{i.dispOrderNo}}
+            </ng-container>
+            <ng-container *ngIf="editCache[i.id].edit">
+              <input type="text" nz-input [(ngModel)]="editCache[i.id].data.dispOrderNo">
+            </ng-container>
+        </td>
+        <td>
+            <ng-container *ngIf="!editCache[i.id].edit">
+                {{i.enableFlg}}
+            </ng-container>
+            <ng-container *ngIf="editCache[i.id].edit">
+                <label nz-checkbox [(ngModel)]="editCache[i.id].data.enableFlg">
+                    
+                  </label>
+            </ng-container>
+        </td>
+        <td>
+          <div class="editable-row-operations">
+          <!-- <a  (click)="startEdit(i.key)">Edit</a> -->
+          <ng-container *ngIf="!editCache[i.id].edit">
+              <i nz-icon type="edit" (click)="startEdit(i.id)"></i>
+          </ng-container>
+
+          <ng-container *ngIf="editCache[i.id].edit">
+              <a (click)="saveEdit(i.id)">OK</a>
+              <nz-popconfirm [nzTitle]="'Sure to cancel?'" (nzOnConfirm)="cancelEdit(i.id)">
+                <a nz-popconfirm>Cancel</a>
+              </nz-popconfirm>
+          </ng-container>
+
+          <nz-divider nzType="vertical"></nz-divider>
+            <nz-popconfirm [nzTitle]="'Sure to remove?'" (nzOnConfirm)="deleteRow(i.id)">
+                <a nz-popconfirm><i nz-icon type="delete" style="color: rgba(0, 0, 0, 0.65);"></i></a>
+            </nz-popconfirm>
+          <nz-divider nzType="vertical"></nz-divider>
+          
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+</div>
