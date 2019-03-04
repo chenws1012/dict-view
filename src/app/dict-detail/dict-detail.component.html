@@ -52,12 +52,12 @@
 
 <button nz-button (click)="addRow()" class="editable-add-btn">Add</button>
 <nz-table #nzTable [nzData]="dataSet" [nzFrontPagination]="false" [nzShowPagination]="false">
-    <thead>
+    <thead (nzSortChange)="sortChange($event)">
       <tr>
-        <th>key</th>
+        <th nzShowSort nzSortKey="dictCd">key</th>
         <th>value</th>
         <th>说明</th>
-        <th>序号</th>
+        <th nzShowSort nzSortKey="dispOrderNo">序号</th>
         <th>有效</th>
 
         

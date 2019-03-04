@@ -154,5 +154,12 @@ export class DictDetailComponent implements OnInit {
     this.editCache[ key ].edit = false;
   }
 
+  sortChange(sort: {key: string, value: string}): void {
+    if (sort.value){
+      const sortData = this.dataSet.sort( (a,b) => (sort.value === 'ascend') ? (a[sort.key] > b[sort.key] ? 1 : -1) : (b[sort.key] > a[sort.key] ? 1 : -1 ) );
+      this.dataSet = sortData;
+    }
+  }
+
 }
 

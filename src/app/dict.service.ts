@@ -15,8 +15,8 @@ export class DictService {
   ) { }
 
 
-  private baseUrl= 'http://localhost:9005';
-  // private baseUrl= 'http://172.81.206.37:9005';
+  // private baseUrl= 'http://localhost:9005';
+  private baseUrl= 'http://172.81.206.37:9005';
 
   httpOptions = {
     headers: new HttpHeaders({
